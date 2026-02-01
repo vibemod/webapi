@@ -1,0 +1,57 @@
+---
+description: How to write API tests
+globs:
+alwaysApply: false
+---
+
+# API Tests
+
+## Key Rules
+
+- Follow best practices for API testing.
+
+## Dependencies
+
+- `clue/framework-x` library
+- `contributte/framex` library
+- `symfony/messenger` library
+- `phpunit/phpunit` library
+
+## Architecture
+
+- Use direct controller instantiation with `$this->container->getByType()`
+- Use `ServerRequest` objects for request preparation
+- Use `stream_for()` and `Json::encode()` for request body preparation
+- Use `assertStringMatchesFormat()` with `%s` placeholders for dynamic values
+- Use database for testing with proper setup/teardown
+- Test all CRUD operations: create, update, get, list, delete
+
+## Templates
+
+- Acme stands for the name of the entity, for example ListUserRequest, ListUserResponse, ListUserController.
+
+### Setup
+
+Use setup if you need to populate data for the test.
+
+Example [AcmeTest.setup.php](mdc:.cursor/code/api-tests/AcmeTest.setup.php)
+
+### Create operation
+
+Example [AcmeTest.create.php](mdc:.cursor/code/api-tests/AcmeTest.create.php)
+
+### Update operation
+
+Example [AcmeTest.update.php](mdc:.cursor/code/api-tests/AcmeTest.update.php)
+
+### Get operation
+
+Example [AcmeTest.get.php](mdc:.cursor/code/api-tests/AcmeTest.get.php)
+
+### List operation
+
+- Example [AcmeTest.list.php](mdc:.cursor/code/api-tests/AcmeTest.list.php)
+
+### Delete operation
+
+- Example [AcmeTest.delete.php](mdc:.cursor/code/api-tests/AcmeTest.delete.php)

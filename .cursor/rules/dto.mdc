@@ -1,0 +1,44 @@
+---
+description: How to create and use Data Transfer Objects (DTOs)
+globs:
+alwaysApply: false
+---
+# DTO (Data Transfer Objects)
+
+## Key Rules
+
+- DTOs are immutable data containers for transferring data between layers
+- Use readonly classes with public properties for DTO implementation
+- DTOs should not contain business logic, only data and conversion methods
+- Every entity should have corresponding DTOs for different use cases
+- Use proper type hints (PHP 8.4 syntax is sufficient)
+- **Do NOT add PHPDoc comments unless explicitly requested by the user**
+- DateTime properties should be formatted as ISO 8601 strings
+
+## Naming Conventions
+
+- Single entity DTO: `AcmeDto` (for get, create, update responses)
+- List item DTO: `AcmeRowDto` (for list operations with minimal fields)
+- Specific use case DTOs: `AcmeDetailDto`, `AcmePreviewDto` when needed
+
+## DTO Structure
+
+- DTOs are `readonly` classes with public properties
+- Include static `fromEntity()` factory method for entity conversion
+- Constructor parameters should match public properties
+- Use Carbon for DateTime formatting: `->toIso8601String()` or `->format('Y-m-d\TH:i:s.u\Z')`
+- Use `final readonly class` for DTOs
+- DateTime properties should be formatted as ISO 8601 strings
+- **Do NOT add PHPDoc comments unless explicitly requested by the user** - PHP 8.4 type hints are sufficient
+
+## Entity Conversion
+
+- Static factory method `fromEntity(EntityClass $entity): self`
+- Handle nullable properties gracefully with null coalescing
+- Format dates consistently using Carbon library
+- Extract only necessary data for the specific use case
+
+## Templates
+
+- Single entity DTO - [AcmeDto.php](mdc:.cursor/code/bus/dtos/AcmeDto.php)
+- List item DTO - [AcmeRowDto.php](mdc:.cursor/code/bus/dtos/AcmeRowDto.php)

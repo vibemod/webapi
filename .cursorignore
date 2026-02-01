@@ -1,0 +1,5 @@
+tests/Fixtures
+*.excalidraw
+!vendor
+vendor/*
+!vendor/moderntv

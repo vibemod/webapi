@@ -1,0 +1,21 @@
+contributte.framex:
+	middlewares:
+		tracy: Contributte\FrameX\Middleware\TracyMiddleware(handleExceptions: %debugMode%)
+		cors: Contributte\FrameX\Middleware\CorsMiddleware
+		negotiation: Contributte\FrameX\Middleware\NegotiationV2Middleware(catchExceptions: %productionMode%)
+
+	routing:
+		# User
+		- {method: GET, path: '/v1/user', controller: App\Api\User\List\ListUserController}
+		- {method: GET, path: '/v1/user/{id}', controller: App\Api\User\Get\GetUserController}
+		- {method: POST, path: '/v1/user', controller: App\Api\User\Create\CreateUserController}
+		- {method: PUT, path: '/v1/user/{id}', controller: App\Api\User\Update\UpdateUserController}
+		- {method: DELETE, path: '/v1/user/{id}', controller: App\Api\User\Delete\DeleteUserController}
+
+services:
+	# User
+	- App\Api\User\Create\CreateUserController
+	- App\Api\User\Delete\DeleteUserController
+	- App\Api\User\Get\GetUserController
+	- App\Api\User\List\ListUserController
+	- App\Api\User\Update\UpdateUserController

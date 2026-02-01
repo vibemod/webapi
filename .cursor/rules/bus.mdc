@@ -1,0 +1,106 @@
+---
+description: How to write command/handler and use symfony messenger
+globs:
+alwaysApply: false
+---
+# Command Bus / Query Bus
+
+## Key Rules
+
+- Follow Command-Bus pattern for write operations (create, update, delete)
+- Follow Query-Bus pattern for read operations (get, list)
+- Follow CQRS pattern - separate commands from queries
+- Use event system in handlers to trigger side effects
+- Commands should be immutable with readonly properties
+- One handler per command/query with `#[AsMessageHandler]` attribute
+- Handlers contain all logic in `__invoke()` method - no method splitting
+
+## Dependencies
+
+- `symfony/messenger` library
+- `contributte/messenger` library
+  - Use `App\Model\Messenger\Bus\QueryBus`
+  - Use `App\Model\Messenger\Bus\CommandBus`
+- Request handling
+  - Use `App\Model\Api\RequestFactory`
+  - Use `App\Model\Api\SchemaInterface`
+
+## Handler Patterns
+
+- Handler class needs `#[AsMessageHandler]` attribute for auto-registration
+- Keep all logic in `__invoke` method, do not split into multiple methods
+- Command handlers return DTOs after persistence operations using `Dto::fromEntity()`
+- Query handlers return DTOs or Result objects for API consumption
+- Always use dependency injection for services (EntityManager, repositories, etc.)
+- Dispatch domain events after successful operations using EventDispatcher
+- Use `EntityManager::flush()` after `persist()` or `remove()` operations
+
+## Command vs Query Patterns
+
+### Commands (All Operations)
+- Every command has exactly one handler
+- Commands can modify system state (create, update, delete) or read data (get, list)
+- Handler uses EntityManager for persistence operations
+- ALWAYS return DTOs using `Dto::fromEntity()` for API response
+- Dispatch domain events after successful operations
+- Use `CommandBus::typedHandle()` for all operations
+
+### Handler Return Patterns
+- ALL handlers must return DTOs, not entities
+- Handlers convert entities to DTOs using `Dto::fromEntity()` before returning
+- List operations use `QueryFilter` for filtering, sorting, pagination
+- List queries return `ListResult` objects with items and metadata
+- Single item queries return DTO objects
+- Use repositories for optimized database queries
+
+## DTO Patterns
+
+- DTOs transfer data between domain and API layers
+- Every entity has corresponding DTOs for different use cases
+- Single entity operations: `AcmeDto` (get, create, update responses)
+- List operations: `AcmeRowDto` (list item in paginated results)
+- DTOs are readonly classes with public properties
+- Include `fromEntity()` static factory method for entity conversion
+- DateTime properties formatted as ISO 8601 strings using Carbon
+- Use proper type hints (PHP 8.4 syntax)
+- **Do NOT add PHPDoc comments unless explicitly requested by the user**
+
+## Configuration
+
+- Services needs to be registered in existing NEON file `config/app/services.neon`.
+- Example of messenger command mapping definition in [config-messenger.neon](mdc:.cursor/code/bus/config/config-messenger.neon)
+- Example of handler service definition in [config-services.neon](mdc:.cursor/code/bus/config/config-services.neon)
+
+## Templates
+
+- Acme stands for the name of the entity, for example CreateUserCommand, CreateUserHandler.
+
+### Create operation
+
+- Command - [CreateAcmeCommand.php](mdc:.cursor/code/bus/commands/CreateAcmeCommand.php)
+- Handler - [CreateAcmeHandler.php](mdc:.cursor/code/bus/handlers/CreateAcmeHandler.php)
+
+### Update operation
+
+- Command - [UpdateAcmeCommand.php](mdc:.cursor/code/bus/commands/UpdateAcmeCommand.php)
+- Handler - [UpdateAcmeHandler.php](mdc:.cursor/code/bus/handlers/UpdateAcmeHandler.php)
+
+### Get operation
+
+- Command - [GetAcmeCommand.php](mdc:.cursor/code/bus/commands/GetAcmeCommand.php)
+- Handler - [GetAcmeHandler.php](mdc:.cursor/code/bus/handlers/GetAcmeHandler.php)
+
+### List operation
+
+- Command - [ListAcmeCommand.php](mdc:.cursor/code/bus/commands/ListAcmeCommand.php)
+- Handler - [ListAcmeHandler.php](mdc:.cursor/code/bus/handlers/ListAcmeHandler.php)
+
+### Delete operation
+
+- Command - [DeleteAcmeCommand.php](mdc:.cursor/code/bus/commands/DeleteAcmeCommand.php)
+- Handler - [DeleteAcmeHandler.php](mdc:.cursor/code/bus/handlers/DeleteAcmeHandler.php)
+
+### DTO
+
+- Single DTO - [AcmeDto.php](mdc:.cursor/code/bus/dtos/AcmeDto.php)
+- List DTO - [AcmeRowDto.php](mdc:.cursor/code/bus/dtos/AcmeRowDto.php)

@@ -1,0 +1,12 @@
+---
+description:
+globs: *.md
+alwaysApply: false
+---
+
+# Documentation
+
+## CRUD
+
+- Use strict order for CRUD operations: create, update, get, list, delete operation.
+- Use `Acme` for the name of the entity, controller, command, handler, query, request, response, service.

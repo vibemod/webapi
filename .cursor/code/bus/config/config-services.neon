@@ -1,0 +1,12 @@
+services:
+    # Acme:Database
+    - App\Domain\Acme\Database\AcmeRepository
+
+    # Acme:Command
+    - App\Domain\Acme\Command\Create\CreateAcmeHandler
+    - App\Domain\Acme\Command\Update\UpdateAcmeHandler
+    - App\Domain\Acme\Command\Delete\DeleteAcmeHandler
+
+    # Acme:Query
+    - App\Domain\Acme\Query\Get\GetAcmeHandler
+    - App\Domain\Acme\Query\List\ListAcmeHandler

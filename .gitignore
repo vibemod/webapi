@@ -1,0 +1,19 @@
+# IDE
+/.idea
+
+# Composer
+/vendor
+
+# Tests
+/var/tmp
+/coverage.xml
+
+# App
+.env
+/config/local.neon
+.docker/data
+
+# Terraform
+/.terraform
+/terraform.*
+/.terraform.lock.hcl.*

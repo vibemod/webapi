@@ -1,0 +1,49 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+# App
+
+## Classes
+
+Here is a list of useful classes that are used in the application.
+
+**API**
+
+- `App\Api\BetterApiController` - extends in case of API controller
+- `Contributte\FrameX\Http\EntityResponse` - use for single entity API responses
+- `Contributte\FrameX\Http\EntityListResponse` - use for list API responses
+- `App\Model\Api\RequestFactory` - use for creating typed request objects
+- `App\Model\Api\SchemaInterface` - implement for request validation
+
+**Messenger**
+
+- `App\Model\Messenger\Bus\CommandBus` - use for mutations (create, update, delete)
+- `App\Model\Messenger\Bus\QueryBus` - use for queries (get, lists)
+- `App\Model\Messenger\Command\BaseCommand` - extends in commands/queries
+
+**PSR-7**
+
+- `use function RingCentral\Psr7\stream_for` - use for creating streams in PSR7
+
+**Tests**
+
+- `Tests\App\DatabaseTestCase` - extends in case of database tests
+
+**Doctrine**
+
+- `App\Model\Doctrine\Exception\EntityNotFoundException` - use for throwing exceptions if entity is not found
+
+## MDB Usage
+
+- Always use `App\Domain\Mdb\Mdb` enum for MDB names instead of hardcoded strings
+- Use `fetchOneBy(['name' => Mdb::CSFD->value])` to fetch by criteria with exception on not found
+- Example: `$mdbRepository->fetchOneBy(['name' => Mdb::IMDB->value])`
+
+## Configuration
+
+- Do not create new NEON files, use existing
+- Services definitions are in `config/app/services.neon`
+- Parameters definitions are in `config/app/parameters.neon`

@@ -1,0 +1,121 @@
+---
+description: How to write Doctrine entities, repositories and perform SQL queries
+globs:
+alwaysApply: false
+---
+# Doctrine
+
+## Key Rules
+
+- Follow Doctrine ORM best practices and conventions
+- Use attributes instead of annotations for metadata mapping
+- Entities should be immutable after creation when possible
+- Always use typed properties (PHP 8.4 syntax)
+- **Do NOT add PHPDoc comments unless explicitly requested by the user**
+- Use UUID v7 for primary keys with Ramsey\Uuid library
+- Implement `toArray()` method for legacy compatibility
+- Repository extends `AbstractRepository` from moderntv/doctrine
+- Use proper relationship mappings (OneToMany, ManyToOne, etc.)
+
+## Dependencies
+
+- `doctrine/orm` library
+- `doctrine/dbal` library
+- `doctrine/fixtures` library
+- `doctrine/migrations` library
+- `nettrine/orm` library
+- `nettrine/dbal` library
+- `nettrine/fixtures` library
+- `nettrine/migrations` library
+- `moderntv/doctrine` library
+
+## Repository Patterns
+
+- Repository extends `AbstractRepository` from `moderntv/doctrine` library
+- Provides common methods: `find()`, `findAll()`, `fetch()` (with exception), `fetchOneBy()` (with exception)
+- Use `fetch()` or `fetchOneBy()` instead of `find()` or `findOneBy()` when entity must exist
+- Custom query methods should use QueryBuilder for complex operations
+- Repository handles entity retrieval and custom queries only
+- **NO PERSISTENCE LOGIC IN REPOSITORIES** - all create/update/delete operations go through command handlers
+- Repository is purely for data access - no business logic
+- Use services for complex business operations that coordinate multiple repositories
+
+## QueryBuilder
+
+- Use `$qb` variable name for QueryBuilder
+- Example: `$qb = $this->em->createQueryBuilder();`
+
+## Query Performance
+
+- **Use `toIterable()` for large result sets** - more memory efficient than `getResult()`
+- `toIterable()` processes results one by one, preventing memory issues with large datasets
+- Use `getResult()` only for small result sets or when you need the full array
+- Always use `toIterable()` in console commands processing many entities
+- Example: `$queryBuilder->getQuery()->toIterable()` instead of `$queryBuilder->getQuery()->getResult()`
+
+## Entity Patterns
+
+- Every entity has exactly one corresponding repository
+- Entity uses `#[ORM\Entity]`, `#[ORM\Table]`, `#[ORM\Column]` attributes
+- Entity has `toArray()` method for legacy array conversion
+- Use `Uuid::uuid7()` for primary keys (time-ordered UUIDs)
+- Include `createdAt` and `updatedAt` timestamp fields
+- Use proper column types: string, integer, datetime_immutable, json
+- Entity constructor should set required fields and defaults
+- Use private/protected properties with public getters when needed
+
+## EntityManager Usage
+
+- EntityManager handles all persistence operations (persist, remove, flush)
+- **ONLY USE EntityManager IN COMMAND HANDLERS** - never in repositories or services
+- Always call `flush()` after `persist()` or `remove()` operations
+- Use `persist()` for new entities, automatic for updates on managed entities
+- Use `remove()` for entity deletion
+- EntityManager injected into command handlers via dependency injection
+- Transactions handled automatically by Doctrine in most cases
+- Services coordinate business logic but delegate persistence to command handlers
+
+## CQRS Pattern
+
+- **Command Handlers**: Handle all write operations (create, update, delete)
+- **Query Handlers**: Handle all read operations (get, list, search)
+- **Services**: Coordinate business logic and orchestrate multiple operations
+- **Repositories**: Pure data access layer - no business logic, no persistence
+- **EntityManager**: Only used in command handlers for persistence operations
+- Services use CommandBus to dispatch commands for persistence operations
+- Services use QueryBus to dispatch queries for read operations
+
+## Command vs Query Separation
+
+- **Commands**: Mutate state, use CommandBus, handled by command handlers
+- **Queries**: Read state, use QueryBus, handled by query handlers
+- **Services**: Business logic layer that coordinates between commands and queries
+- **Repositories**: Data access layer for complex queries and data retrieval
+
+## Configuration
+
+- Each custom repository needs to be registered in the NEON.
+- Example of repository registration in Nette.
+    ```neon
+    services:
+        - App\Domain\Acme\Database\AcmeRepository
+    ```
+
+## Exception Handling
+
+- Use `EntityNotFoundException::notFoundById($id)` when entity not found
+- Repository `fetch()` method throws this exception automatically
+- Use `find()` method when null return is acceptable
+- Handle exceptions at the application/API layer, not in domain layer
+
+## Templates
+
+- Acme stands for the name of the entity, for example Acme, AcmeRepository.
+
+### Repository
+
+- Repository class - [AcmeRepository.php](mdc:.cursor/code/doctrine/AcmeRepository.php)
+
+### Entity
+
+- Entity class - [Acme.php](mdc:.cursor/code/doctrine/Acme.php)

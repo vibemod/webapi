@@ -1,0 +1,8 @@
+contributte.framex:
+    routing:
+        # Acme API Routes
+        - {method: GET, path: '/v1/acme', controller: App\Api\Acme\List\ListAcmeController}
+        - {method: GET, path: '/v1/acme/{id}', controller: App\Api\Acme\Get\GetAcmeController}
+        - {method: POST, path: '/v1/acme', controller: App\Api\Acme\Create\CreateAcmeController}
+        - {method: PUT, path: '/v1/acme/{id}', controller: App\Api\Acme\Update\UpdateAcmeController}
+        - {method: DELETE, path: '/v1/acme/{id}', controller: App\Api\Acme\Delete\DeleteAcmeController}

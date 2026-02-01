@@ -1,0 +1,60 @@
+---
+description: How to write tests for the application
+globs:
+alwaysApply: false
+---
+# Testing
+
+## Key Rules
+
+- Write unit tests for business logic in handlers and services
+- Write integration tests for API endpoints
+- Use PHPUnit as the testing framework
+- Mock external dependencies using PHPUnit mocks
+- Test both happy path and error scenarios
+- Follow Arrange-Act-Assert pattern in test methods
+
+## Test Structure
+
+### Unit Tests
+- Test individual classes in isolation
+- Mock all dependencies using PHPUnit mocks
+- Focus on business logic correctness
+- Located alongside the tested code or in `tests/Unit/`
+
+### Integration Tests  
+- Test API endpoints end-to-end
+- Use test database with fixtures
+- Test request/response handling
+- Located in `tests/Integration/` or similar
+
+### Test Naming
+- Test classes: `ClassNameTest`
+- Test methods: `testMethodName_Scenario_ExpectedResult`
+- Use descriptive names explaining what is being tested
+
+## API Test Templates
+
+- API test examples in [.cursor/code/api-tests/](mdc:.cursor/code/api-tests/)
+- Follow existing patterns for setup, execution, and assertions
+- Use test data fixtures for consistent test scenarios
+
+## Database Testing
+
+- Use separate test database configuration
+- Reset database state between tests
+- Use factories or fixtures for test data creation
+- Clean up after tests to avoid side effects
+
+## Running Tests
+
+- Use `make test` to run the complete test suite
+- Use `make phpstan` to run static analysis
+- **Exception**: Direct `vendor/bin/phpunit <file>` is acceptable when testing a single file
+- Never run PHPStan directly, always use `make phpstan`
+- Never run code sniffer directly, always use `make cs` or `make csf`
+
+## Templates
+
+- API test examples: [AcmeTest.*.php](mdc:.cursor/code/api-tests/)
+- Follow existing test patterns in the project

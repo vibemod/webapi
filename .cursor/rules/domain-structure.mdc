@@ -1,0 +1,89 @@
+---
+description: Domain layer file structure and organization
+globs:
+alwaysApply: false
+---
+
+# Domain Structure
+
+## Key Rules
+
+- Follow Domain-Driven Design (DDD) principles
+- Organize domain logic into distinct modules
+- Use consistent directory structure across all domains
+- Separate commands from queries (CQRS pattern)
+
+## Directory Structure
+
+```
+src/Domain/{Entity}/
+├── Command/
+│   ├── Create/
+│   │   ├── Create{Entity}Command.php
+│   │   └── Create{Entity}Handler.php
+│   ├── Update/
+│   │   ├── Update{Entity}Command.php
+│   │   └── Update{Entity}Handler.php
+│   └── Delete/
+│       ├── Delete{Entity}Command.php
+│       └── Delete{Entity}Handler.php
+├── Query/
+│   └── {Entity}/
+│       ├── Get{Entity}Command.php
+│       ├── Get{Entity}Handler.php
+│       ├── List{Entity}Command.php
+│       ├── List{Entity}Handler.php
+│       └── List{Entity}Result.php
+├── Database/
+│   ├── {Entity}.php
+│   └── {Entity}Repository.php
+├── DTO/
+│   ├── {Entity}Dto.php
+│   └── {Entity}RowDto.php
+├── Event/
+│   ├── {Entity}CreatedEvent.php
+│   ├── {Entity}UpdatedEvent.php
+│   └── {Entity}DeletedEvent.php
+├── Service/
+│   └── {Entity}Manager.php
+├── Message/
+│   ├── {Entity}OperationMessage.php
+│   └── {Entity}OperationMessageHandler.php
+└── Subscriber/
+    └── {Entity}EventSubscriber.php
+```
+
+## Naming Conventions
+
+- Commands: `{Action}{Entity}Command` (e.g., `CreateChannelCommand`)
+- Handlers: `{Action}{Entity}Handler` (e.g., `CreateChannelHandler`)
+- DTOs: `{Entity}Dto` for single entities, `{Entity}RowDto` for list items
+- Events: `{Entity}{Action}Event` (e.g., `ChannelCreatedEvent`)
+- Services: `{Entity}Manager` (e.g., `ChannelManager`)
+
+## Service Registration
+
+- Register all handlers in `config/app/services.neon`
+- Group services by domain and operation type
+- Use comments to organize service definitions
+- Example:
+  ```neon
+  # {Entity}:Database
+  - App\Domain\{Entity}\Database\{Entity}Repository
+
+  # {Entity}:Command
+  - App\Domain\{Entity}\Command\Create\Create{Entity}Handler
+  - App\Domain\{Entity}\Command\Update\Update{Entity}Handler
+  - App\Domain\{Entity}\Command\Delete\Delete{Entity}Handler
+
+  # {Entity}:Query
+  - App\Domain\{Entity}\Query\{Entity}\Get{Entity}Handler
+  - App\Domain\{Entity}\Query\{Entity}\List{Entity}Handler
+  ```
+
+## File Organization
+
+- Keep related files in the same directory
+- Use descriptive directory names
+- Follow the established pattern from existing domains (Epg, Channel)
+- Maintain consistency across all domain modules

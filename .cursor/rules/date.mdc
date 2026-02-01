@@ -1,0 +1,17 @@
+---
+description: How to use date, time, datetime
+globs:
+alwaysApply: false
+---
+
+# Date / Time
+
+## Key Rules
+
+- Use Carbon for date and time manipulation.
+- Do not use `DateTime` or `DateTimeImmutable` directly.
+    - Only in Doctrine Entities.
+
+## Dependencies
+
+- `nesbot/carbon` library

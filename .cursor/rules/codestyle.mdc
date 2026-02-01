@@ -1,0 +1,65 @@
+---
+description: Code style and import ordering rules
+globs: *.php
+alwaysApply: true
+---
+
+# Code Style
+
+## Key Rules
+
+- Use PHP 8.4 syntax with strict types
+- Follow PSR-4 autoloading standards
+- Use spaces for indentation (4 spaces)
+- One class per file
+- Files must end with a newline
+
+## Import Ordering
+
+- **CRITICAL**: Use statements must be sorted alphabetically
+- Group imports by type:
+  1. Application classes (`App\*`)
+  2. Framework classes (`Contributte\*`, `Nettrine\*`, `Symfony\*`)
+  3. Third-party libraries (`Ramsey\*`, `Doctrine\*`, `Psr\*`)
+  4. PHP built-ins (`DateTime`, `Exception`)
+
+## Common Import Patterns
+
+### API Controllers
+
+```php
+use App\Api\BetterApiController;
+use App\Domain\{Entity}\Database\{Entity};
+use App\Domain\{Entity}\Command\{Action}\{Action}{Entity}Command;
+use App\Model\Api\RequestFactory;
+use App\Model\Messenger\Bus\{CommandBus|QueryBus};
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+```
+
+### Request Classes
+
+```php
+use App\Model\Api\SchemaInterface;
+use Nette\Schema\Expect;
+```
+
+### Response Classes
+```php
+use App\Domain\{Entity}\DTO\{Entity}Dto;
+use Contributte\FrameX\Http\{EntityResponse|EntityListResponse};
+```
+
+## Code Style Violations to Avoid
+
+- ❌ Incorrectly ordered use statements
+- ❌ Missing strict types declaration
+- ❌ Missing return type hints
+- ❌ Inconsistent spacing around operators
+- ❌ Adding PHPDoc comments without user request (PHP 8.4 type hints are sufficient)
+
+## Tools
+
+- Use `make cs` to check code style
+- Use `make cs-fix` to automatically fix violations
+- Follow the project's `ruleset.xml` configuration

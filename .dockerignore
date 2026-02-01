@@ -1,0 +1,14 @@
+/.idea
+/.git
+/.claude
+/.cursor
+/config/local.neon
+/tests
+/var/*
+/.editorconfig
+/phpstan.neon
+/phpunit.xml
+/ruleset.xml
+/AGENTS.md
+/CLAUDE.md
+/.cursorignore

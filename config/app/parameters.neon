@@ -1,0 +1,6 @@
+parameters:
+	database:
+		driver: pdo_sqlite
+		path: %appDir%/../var/db.sqlite
+		user: test
+		password: test

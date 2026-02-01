@@ -1,0 +1,32 @@
+services:
+	#################################################
+	# DOMAIN ########################################
+	#################################################
+
+	# User:Database
+	- App\Domain\User\Database\UserRepository
+
+	# User:Command
+	- App\Domain\User\Command\Create\CreateUserHandler
+	- App\Domain\User\Command\Update\UpdateUserHandler
+	- App\Domain\User\Command\Delete\DeleteUserHandler
+
+	# User:Query
+	- App\Domain\User\Query\Get\GetUserHandler
+	- App\Domain\User\Query\List\ListUserHandler
+
+	#################################################
+	# Model #########################################
+	#################################################
+
+	# Model:Api
+	- App\Model\Api\RequestFactory
+
+	logger.console:
+		factory: Symfony\Component\Console\Logger\ConsoleLogger(
+			Symfony\Component\Console\Output\ConsoleOutput(
+				Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE
+			)
+		)
+		autowired: false
+

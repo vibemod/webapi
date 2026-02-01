@@ -1,0 +1,56 @@
+---
+description: How to use events and subscribers
+globs:
+alwaysApply: false
+---
+# Events
+
+## Key Rules
+
+- Follow Domain Event pattern for decoupling business logic
+- Events represent something that happened in the domain
+- Events are immutable objects containing relevant data
+- Use EventDispatcher to dispatch events after successful operations
+- Subscribers handle side effects like logging, notifications, cache invalidation
+
+## Dependencies
+
+- `symfony/event-dispatcher` library for event dispatching
+- `symfony/event-dispatcher-contracts` for interfaces
+
+## Event Structure
+
+- Event classes are simple data containers with the entity/data
+- Event naming: `Acme<Action>Event` (AcmeCreatedEvent, AcmeUpdatedEvent, AcmeDeletedEvent)
+- Events should contain the affected entity and relevant context
+- Events are dispatched after the main operation succeeds
+
+## Event Handling
+
+- Use EventSubscriber classes to listen for events
+- Subscribers implement `EventSubscriberInterface`
+- Register subscribers in NEON configuration
+- Keep subscriber logic focused and lightweight
+
+## When to Use Events
+
+- Entity lifecycle events (created, updated, deleted)  
+- Cross-domain communication (EPG changes affecting search index)
+- Audit logging and activity tracking
+- Cache invalidation
+- External system notifications
+
+## Templates
+
+### Create operation
+
+- Event object - [AcmeCreatedEvent.php](mdc:.cursor/code/events/AcmeCreatedEvent.php)
+
+### Update operation
+
+- Event object - [AcmeUpdatedEvent.php](mdc:.cursor/code/events/AcmeUpdatedEvent.php)
+
+### Delete operation
+
+- Event object - [AcmeDeletedEvent.php](mdc:.cursor/code/events/AcmeDeletedEvent.php)
+

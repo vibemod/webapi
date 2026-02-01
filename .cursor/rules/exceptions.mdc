@@ -1,0 +1,21 @@
+---
+description:
+globs: *.php
+alwaysApply: false
+---
+
+# Exceptions
+
+## Key Rules
+
+- Do not use exceptions in phpdoc.
+- Use exceptions from our codebase/namespace.
+
+## Types
+
+- Use LogicalException for logical errors.
+    - We can predict.
+    - It's a developer error.
+- Use RuntimeException for runtime errors.
+    - We cannot predict.
+    - It's a system error.

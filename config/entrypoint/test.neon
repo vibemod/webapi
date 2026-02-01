@@ -1,0 +1,35 @@
+includes:
+	- cli.neon
+	- web.neon
+
+nettrine.dbal:
+	connections:
+		default!:
+			driver: pdo_sqlite
+			path: ":memory:"
+			user: test
+			password: test
+
+			resultCache: Symfony\Component\Cache\Adapter\ArrayAdapter()
+
+nettrine.orm:
+	managers:
+		default:
+			autoGenerateProxyClasses: true
+
+			queryCache: Symfony\Component\Cache\Adapter\ArrayAdapter()
+			resultCache: Symfony\Component\Cache\Adapter\ArrayAdapter()
+			hydrationCache: Symfony\Component\Cache\Adapter\ArrayAdapter()
+			metadataCache: Symfony\Component\Cache\Adapter\ArrayAdapter()
+
+parameters:
+	proxyCacheDir: %testsDir%/Fixtures/ProxyCache
+
+contributte.messenger:
+	logger:
+		consoleLogger: @logger.console
+
+services:
+	logger.console:
+		factory: Psr\Log\NullLogger
+		autowired: false

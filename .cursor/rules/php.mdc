@@ -1,0 +1,54 @@
+---
+description:
+globs: *.php
+alwaysApply: false
+---
+# PHP
+
+## Key Rules
+
+- Use PHP 8.4 syntax.
+- Use strict types.
+- Be sure you import existing classes.
+- **Avoid PHP references** - use stdClass objects or return arrays instead.
+- **Do NOT add PHPDoc comments unless explicitly requested by the user** - PHP 8.4 type hints are sufficient for most cases.
+
+## Codestyle
+
+- Use `make cs` to check code style and `make csf` to fix violations.
+- One file should contain one class.
+- Use spaces for indentation.
+- Follow PSR-4
+- Use imports and namespaces
+- Order properties by visibility (public, protected, private)
+- Order methods by visibility (public, protected, private)
+
+### Class Structure
+
+- One empty line after class opening brace
+- One empty line before class closing brace
+- One blank line between properties
+- One blank line before first function
+- One blank line after last function
+
+### Function Structure
+
+- Opening brace should be on a new line
+- One blank line before function
+- One blank line after function
+
+### File Structure
+
+- Files must end with a newline
+
+### References
+
+- **Avoid PHP references** (`&$variable`) - they make code harder to understand and debug
+- Use `stdClass` objects for tracking multiple values across function calls
+- Use return arrays or DTOs instead of modifying variables by reference
+- Example: Instead of `function process(&$count, &$errors)`, use `function process(\stdClass $stats)`
+
+### Example
+
+Example [code.php](mdc:.cursor/code/php/code.php)
+

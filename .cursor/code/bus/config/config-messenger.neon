@@ -1,0 +1,8 @@
+contributte.messenger:
+    routing:
+        # Acme
+        App\Domain\Acme\Command\Create\CreateAcmeCommand: [sync]
+        App\Domain\Acme\Command\Update\UpdateAcmeCommand: [sync]
+        App\Domain\Acme\Command\Delete\DeleteAcmeCommand: [sync]
+        App\Domain\Acme\Query\Get\GetAcmeCommand: [sync]
+        App\Domain\Acme\Query\List\ListAcmeCommand: [sync]

@@ -1,0 +1,7 @@
+services:
+    # Acme API Controllers
+    - App\Api\Acme\Create\CreateAcmeController
+    - App\Api\Acme\Update\UpdateAcmeController
+    - App\Api\Acme\Get\GetAcmeController
+    - App\Api\Acme\List\ListAcmeController
+    - App\Api\Acme\Delete\DeleteAcmeController

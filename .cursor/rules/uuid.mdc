@@ -1,0 +1,30 @@
+---
+description: How to use UUID
+globs:
+alwaysApply: false
+---
+
+# UUID
+
+## Key Rules
+
+- **ALWAYS use UUID v7** for generating new UUIDs
+- Use Ramsey's `Uuid` class for generating and handling UUIDs
+- Use `Uuid::uuid7()` for all new UUID generation
+- Never use other UUID versions (v1, v3, v4, v5, v6)
+
+## Usage
+
+```php
+use Ramsey\Uuid\Uuid;
+
+// Generate UUID v7 as string
+$id = Uuid::uuid7()->toString();
+
+// Generate UUID v7 as UuidInterface (also acceptable)
+$id = Uuid::uuid7();
+```
+
+## Dependencies
+
+- `ramsey/uuid` library

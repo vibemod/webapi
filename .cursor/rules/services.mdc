@@ -1,0 +1,52 @@
+---
+description: How to create and structure domain services
+globs:
+alwaysApply: false
+---
+# Domain Services
+
+## Key Rules
+
+- Services contain business logic that doesn't belong in entities or repositories
+- Services are stateless and use dependency injection for external dependencies
+- Services should have single responsibility and focused purpose
+- Use services for complex operations involving multiple entities
+- Services coordinate between entities, repositories, and external systems
+
+## Service Categories
+
+### Domain Services
+- Contain core business logic and domain rules
+- Located in `src/Domain/[Context]/Service/`
+- Examples: `EpgManager`, `TitleManager`, `SitemapDownloader`
+
+### Application Services  
+- Orchestrate domain operations for use cases
+- Bridge between API layer and domain layer
+- Handle cross-cutting concerns like logging, caching
+
+## Service Structure
+
+- Services are regular PHP classes with clear constructor dependencies
+- Use constructor injection for all dependencies
+- Methods should have clear names describing the business operation
+- Return appropriate domain objects or DTOs
+- Handle domain exceptions appropriately
+
+## Dependencies
+
+- Inject repositories for data access
+- Inject other services for collaboration
+- Inject external clients (HTTP, message queues)
+- Inject event dispatcher for domain events
+
+## Configuration
+
+- Register services in `config/app/services.neon`
+- Services are automatically registered if following naming conventions
+- Use interfaces when service has multiple implementations
+
+## Templates
+
+- Domain service examples can be found in existing `src/Domain/*/Service/` directories
+- Follow existing patterns in `EpgManager`, `TitleManager`, etc.

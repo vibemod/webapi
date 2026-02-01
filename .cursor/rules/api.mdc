@@ -1,0 +1,122 @@
+---
+description: How to write API (CRUD), request/response objects
+globs:
+alwaysApply: false
+---
+# API
+
+## Key Rules
+
+- Follow REST API pattern with standard HTTP methods (GET, POST, PUT, DELETE).
+- Add fields, properties, params according to entity fields.
+- Use proper HTTP status codes in responses.
+- Controllers should convert entities to DTOs before returning responses.
+- All API responses should extend `EntityResponse` or `ListResponse`.
+- **Do NOT add PHPDoc comments unless explicitly requested by the user** - PHP 8.4 type hints are sufficient.
+- Follow consistent naming: `CreateAcmeController`, `GetAcmeController`, `ListAcmeController`.
+- Request validation through Nette Schema with proper type casting.
+- Query parameters for filtering, sorting, and pagination in list operations.
+
+## Dependencies
+
+- `clue/framework-x` library
+- `contributte/framex` library
+- `symfony/messenger` library
+
+## Architecture
+
+- Use request class called `ListAcmeRequest` for request mapping.
+- Use response class called `ListAcmeResponse` for response mapping.
+- Use controller called `ListAcmeController` for handling http request/response.
+
+## Data Flow
+
+- Use `CommandBus` for ALL operations (create, update, delete, get, list) - returns DTOs
+- Controllers receive DTOs directly from command bus handlers
+- Pass DTOs to response classes - responses should NOT create DTOs internally
+- Use `AcmeDto` for single entity responses (get, create, update)
+- Use `AcmeRowDto` for list item responses in paginated results
+- DTOs should have `fromEntity()` static factory method for conversion
+- ALL handlers must return DTOs, not entities
+- Handlers convert entities to DTOs using `Dto::fromEntity()` before returning
+
+## Controller Patterns
+
+- Controllers must use `__invoke(ServerRequestInterface $serverRequest)` method signature
+- Use `RequestFactory::createRequest()` to create typed request objects
+- Use `CommandBus::typedHandle()` for ALL operations (create, update, delete, get, list) - returns DTOs
+- Controllers receive DTOs directly from bus handlers - no entity-to-DTO conversion needed
+- Pass DTOs to response classes - responses should NOT create DTOs internally
+- Response classes must have static `of()` factory method accepting DTOs
+- Always use proper return type hints for controller methods
+- Use `CommandBus` for both read and write operations (not QueryBus)
+
+## Request Structure
+
+- Request class implements `SchemaInterface` for validation
+- Request class has `schema()` method for defining request schema
+- Allowed structures: `query`, `body`, `params`
+- Use `Expect::structure()` for complex validation with proper casting
+- Body requests need separate `RequestBody` class for type safety
+- Query parameters automatically converted to `QueryFilter` for list operations
+- All required fields marked with `->required()`
+- Use appropriate Expect types: `string()`, `int()`, `array()`, `bool()`
+
+## Response Structure
+
+- Single entity responses extend `Contributte\FrameX\Http\EntityResponse` from FrameX
+- List responses extend `Contributte\FrameX\Http\EntityListResponse` from FrameX
+- Response class has static `of()` method accepting DTO parameter
+- **Do NOT add PHPDoc comments unless explicitly requested by the user**
+- Response payload contains only serializable data (strings, numbers, arrays)
+- DateTime fields formatted as ISO 8601 strings
+- List responses include metadata: total count, pagination info
+- Use `@extends EntityResponse<array{...}>` or `@extends EntityListResponse<DtoClass>` for proper generics
+
+## Configuration
+
+- Controllers registered in `config/app/services.neon` as services
+- Routes defined in FrameX configuration (see [config-framex.neon](mdc:.cursor/code/api/config-framex.neon))
+- Standard REST route patterns:
+  - `POST /api/acmes` → CreateAcmeController
+  - `GET /api/acmes/{id}` → GetAcmeController
+  - `GET /api/acmes` → ListAcmeController
+  - `PUT /api/acmes/{id}` → UpdateAcmeController
+  - `DELETE /api/acmes/{id}` → DeleteAcmeController
+
+## Templates
+
+- Acme stands for the name of the entity, for example ListUserRequest, ListUserResponse, ListUserController.
+
+### Create operation
+
+- Request object - [CreateAcmeRequest.php](mdc:.cursor/code/api/CreateAcmeRequest.php)
+- Request body - [CreateAcmeRequestBody.php](mdc:.cursor/code/api/CreateAcmeRequestBody.php)
+- Response object - [CreateAcmeResponse.php](mdc:.cursor/code/api/CreateAcmeResponse.php)
+- Controller object - [CreateAcmeController.php](mdc:.cursor/code/api/CreateAcmeController.php)
+
+### Update operation
+
+- Request object - [UpdateAcmeRequest.php](mdc:.cursor/code/api/UpdateAcmeRequest.php)
+- Request body - [UpdateAcmeRequestBody.php](mdc:.cursor/code/api/UpdateAcmeRequestBody.php)
+- Response object - [UpdateAcmeResponse.php](mdc:.cursor/code/api/UpdateAcmeResponse.php)
+- Controller object - [UpdateAcmeController.php](mdc:.cursor/code/api/UpdateAcmeController.php)
+
+### Get operation
+
+- Request object - [GetAcmeRequest.php](mdc:.cursor/code/api/GetAcmeRequest.php)
+- Response object - [GetAcmeResponse.php](mdc:.cursor/code/api/GetAcmeResponse.php)
+- Controller object - [GetAcmeController.php](mdc:.cursor/code/api/GetAcmeController.php)
+
+### List operation
+
+- Request object - [ListAcmeRequest.php](mdc:.cursor/code/api/ListAcmeRequest.php)
+- Response object - [ListAcmeResponse.php](mdc:.cursor/code/api/ListAcmeResponse.php)
+- Controller object - [ListAcmeController.php](mdc:.cursor/code/api/ListAcmeController.php)
+
+### Delete operation
+
+- Request object - [DeleteAcmeRequest.php](mdc:.cursor/code/api/DeleteAcmeRequest.php)
+- Response object - [DeleteAcmeResponse.php](mdc:.cursor/code/api/DeleteAcmeResponse.php)
+- Controller object - [DeleteAcmeController.php](mdc:.cursor/code/api/DeleteAcmeController.php)
+

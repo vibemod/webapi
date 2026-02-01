@@ -1,0 +1,99 @@
+extensions:
+	# Extensions (before)
+	contributte.monolog: Contributte\Monolog\DI\MonologExtension
+	contributte.console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+	contributte.messenger: Contributte\Messenger\DI\MessengerExtension
+	contributte.events: Contributte\EventDispatcher\DI\EventDispatcherExtension
+
+	# Nettrine
+	nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
+	nettrine.fixtures: Nettrine\Fixtures\DI\FixturesExtension
+
+	# Nettrine DBAL
+	nettrine.dbal: Nettrine\DBAL\DI\DbalExtension
+
+	# Nettrine ORM
+	nettrine.orm: Nettrine\ORM\DI\OrmExtension
+
+	# Extensions (after)
+	contributte.framex: Contributte\FrameX\DI\FrameXExtension
+
+contributte.console:
+	url: http://localhost/
+	name: Webapi
+	version: '1.0'
+	catchExceptions: %productionMode%
+	autoExit: true
+
+contributte.monolog:
+	holder:
+		enabled: true
+	hook:
+		toTracy: false
+	channel:
+		default:
+			handlers:
+				- Monolog\Handler\RotatingFileHandler(%appDir%/../var/log/syslog.log, 30, Monolog\Logger::INFO)
+			processors:
+				- Monolog\Processor\WebProcessor()
+				- Monolog\Processor\IntrospectionProcessor()
+				- Monolog\Processor\MemoryPeakUsageProcessor()
+				- Monolog\Processor\ProcessIdProcessor()
+
+nettrine.dbal:
+	debug:
+		panel: %debugMode%
+	types:
+		uuid: Ramsey\Uuid\Doctrine\UuidType
+	connections:
+		default:
+			driver: %database.driver%
+			path: %database.path%
+			user: %database.user%
+			password: %database.password%
+
+			resultCache: Symfony\Component\Cache\Adapter\FilesystemAdapter(namespace: dbal, defaultLifetime: 0, directory: %tempDir%/cache/doctrine)
+
+nettrine.orm:
+	managers:
+		default:
+			connection: default
+			autoGenerateProxyClasses: Doctrine\ORM\Proxy\ProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS
+			mapping:
+				default:
+					namespace: App\Domain
+					directories:
+						- %appDir%/Domain
+
+			queryCache: Symfony\Component\Cache\Adapter\FilesystemAdapter(namespace: query, defaultLifetime: 0, directory: %tempDir%/cache/doctrine/orm)
+			resultCache: Symfony\Component\Cache\Adapter\FilesystemAdapter(namespace: result, defaultLifetime: 0, directory: %tempDir%/cache/doctrine/orm)
+			hydrationCache: Symfony\Component\Cache\Adapter\FilesystemAdapter(namespace: hydration, defaultLifetime: 0, directory: %tempDir%/doctrine/orm)
+			metadataCache: Symfony\Component\Cache\Adapter\FilesystemAdapter(namespace: metadata, defaultLifetime: 0, directory: %tempDir%/cache/doctrine/orm)
+
+nettrine.migrations:
+	directories:
+		Database\Migrations: %appDir%/../db/Migrations
+	manager: default
+
+nettrine.fixtures:
+	paths:
+		- %rootDir%/db/Fixtures
+
+contributte.framex:
+	routing: []
+
+contributte.messenger:
+	bus:
+		commandBus:
+			wrapper: App\Model\Messenger\Bus\CommandBus
+			defaultMiddlewares: true
+		queryBus:
+			wrapper: App\Model\Messenger\Bus\QueryBus
+			defaultMiddlewares: true
+	logger:
+		consoleLogger: @logger.console
+	transport:
+		sync:
+			dsn: "sync://"
+
+	routing: []
