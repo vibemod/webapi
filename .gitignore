@@ -5,7 +5,6 @@
 /vendor
 
 # Tests
-/var/tmp
 /coverage.xml
 
 # App
