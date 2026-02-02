@@ -15,6 +15,18 @@ services:
 	- App\Domain\User\Query\Get\GetUserHandler
 	- App\Domain\User\Query\List\ListUserHandler
 
+	# UserProfile:Database
+	- App\Domain\UserProfile\Database\UserProfileRepository
+
+	# UserProfile:Command
+	- App\Domain\UserProfile\Command\Create\CreateUserProfileHandler
+	- App\Domain\UserProfile\Command\Update\UpdateUserProfileHandler
+	- App\Domain\UserProfile\Command\Delete\DeleteUserProfileHandler
+
+	# UserProfile:Query
+	- App\Domain\UserProfile\Query\Get\GetUserProfileHandler
+	- App\Domain\UserProfile\Query\List\ListUserProfileHandler
+
 	#################################################
 	# Model #########################################
 	#################################################

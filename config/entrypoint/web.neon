@@ -12,6 +12,13 @@ contributte.framex:
 		- {method: PUT, path: '/v1/user/{id}', controller: App\Api\User\Update\UpdateUserController}
 		- {method: DELETE, path: '/v1/user/{id}', controller: App\Api\User\Delete\DeleteUserController}
 
+		# UserProfile
+		- {method: GET, path: '/v1/user-profile', controller: App\Api\UserProfile\List\ListUserProfileController}
+		- {method: GET, path: '/v1/user-profile/{id}', controller: App\Api\UserProfile\Get\GetUserProfileController}
+		- {method: POST, path: '/v1/user-profile', controller: App\Api\UserProfile\Create\CreateUserProfileController}
+		- {method: PUT, path: '/v1/user-profile/{id}', controller: App\Api\UserProfile\Update\UpdateUserProfileController}
+		- {method: DELETE, path: '/v1/user-profile/{id}', controller: App\Api\UserProfile\Delete\DeleteUserProfileController}
+
 services:
 	# User
 	- App\Api\User\Create\CreateUserController
@@ -19,3 +26,10 @@ services:
 	- App\Api\User\Get\GetUserController
 	- App\Api\User\List\ListUserController
 	- App\Api\User\Update\UpdateUserController
+
+	# UserProfile
+	- App\Api\UserProfile\Create\CreateUserProfileController
+	- App\Api\UserProfile\Delete\DeleteUserProfileController
+	- App\Api\UserProfile\Get\GetUserProfileController
+	- App\Api\UserProfile\List\ListUserProfileController
+	- App\Api\UserProfile\Update\UpdateUserProfileController
